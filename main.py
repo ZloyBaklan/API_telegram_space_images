@@ -8,11 +8,11 @@ from pathlib import Path
 from dotenv import load_dotenv
 
 
-def saving_images(content, content_path):
+def saving_images(content, content_path, selected_image_name, image_format): # добавить сразу приписку формата изображения
     Path(content_path).mkdir(parents=True, exist_ok=True)
     count = 0
     for i in content:
-        filename = f'space_{count}.jpg'
+        filename = f'{selected_image_name}_{count}{image_format}'
         with open(os.path.join(content_path, filename), 'wb') as file:
             file.write(requests.get(i).content)
         count+=1
@@ -40,6 +40,7 @@ def nasa_space_img(nasa_token):
         nasa_images_database.append(i['url'])
     return nasa_images_database
 
+# сейчас возвращается и название и формат
 def define_image_format(test_url):
     image_name = os.path.split(urlparse(test_url).path)
     image_format = os.path.splitext(unquote(image_name[-1]))
@@ -51,14 +52,19 @@ def nasa_epic_images(nasa_token):
         'api_key': f'{nasa_token}',
     }
     response = requests.get(epic_url,  params=params)
-    image_datetime, image_name = response.json()[-1]['date'], response.json()[-1]['image']
-    image_date = datetime.datetime.strptime(image_datetime, '%Y-%m-%d %H:%M:%S')
-    main_url = f'https://api.nasa.gov/EPIC/archive/natural/{image_date.strftime("%Y/%m/%d")}/png/{image_name}.png'
-    params_main = {
-        'api_key': f'{nasa_token}',
-    }
-    response_main = requests.get(main_url,  params=params_main)
-    print (response_main.url)
+    nasa_epic_images_database = []
+    response_content = response.json()
+    for i in response_content:
+        image_datetime, image_name = i['date'], i['image']
+        image_date = datetime.datetime.strptime(image_datetime, '%Y-%m-%d %H:%M:%S')
+        main_url = f'https://api.nasa.gov/EPIC/archive/natural/{image_date.strftime("%Y/%m/%d")}/png/{image_name}.png'
+        params_main = {
+            'api_key': f'{nasa_token}',
+        }
+        response_main = requests.get(main_url,  params=params_main)
+        nasa_epic_images_database.append(response_main.url)
+        if i == response_content[3]: #костыль, чтобы не выгружать всю базу
+            return nasa_epic_images_database
 
 if __name__ == '__main__':
     flight_id = '5eb87d47ffd86e000604b38a'
@@ -67,7 +73,8 @@ if __name__ == '__main__':
     load_dotenv()
     nasa_token = os.getenv('NASA_TOKEN')
     # nasa_space_img(nasa_token)
-    # print(define_image_format(nasa_url))
+    nasa_epic_content = nasa_epic_images(nasa_token)
+    selected_image_name, image_format = define_image_format(nasa_epic_content[0]) # функция определения формата принимает только одну ссылку...
     # fetch_spacex_last_launch(content_url)
-    # saving_images(nasa_images, content_path)
-    nasa_epic_images(nasa_token)
+    saving_images(nasa_epic_content, content_path, selected_image_name, image_format)
+    
