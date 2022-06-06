@@ -83,4 +83,4 @@ if __name__ == '__main__':
     updates = bot.get_updates()
     print(updates[-1])
     chat_id = updates[-1].channel_post.chat.id
-    bot.send_message(chat_id=chat_id, text="I'm sorry...I'm afraid...")
+    bot.send_photo(chat_id=chat_id, photo=open(f'images/space_0.jpg', 'rb'))
