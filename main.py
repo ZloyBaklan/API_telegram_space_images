@@ -1,6 +1,7 @@
 from importlib.resources import path
 import os
 import datetime
+import telegram
 from random import randint
 from urllib.parse import urlparse, unquote
 import requests
@@ -73,8 +74,13 @@ if __name__ == '__main__':
     load_dotenv()
     nasa_token = os.getenv('NASA_TOKEN')
     # nasa_space_img(nasa_token)
-    nasa_epic_content = nasa_epic_images(nasa_token)
-    selected_image_name, image_format = define_image_format(nasa_epic_content[0]) # функция определения формата принимает только одну ссылку...
+    # nasa_epic_content = nasa_epic_images(nasa_token)
+    # selected_image_name, image_format = define_image_format(nasa_epic_content[0]) # функция определения формата принимает только одну ссылку...
     # fetch_spacex_last_launch(content_url)
-    saving_images(nasa_epic_content, content_path, selected_image_name, image_format)
-    
+    # saving_images(nasa_epic_content, content_path, selected_image_name, image_format)
+    telegram_token = os.getenv('TELEGRAM_TOKEN')
+    bot = telegram.Bot(token=telegram_token)
+    updates = bot.get_updates()
+    print(updates[-1])
+    chat_id = updates[-1].channel_post.chat.id
+    bot.send_message(chat_id=chat_id, text="I'm sorry...I'm afraid...")
