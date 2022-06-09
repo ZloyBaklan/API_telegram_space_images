@@ -9,3 +9,9 @@ def define_image_format(content):
         image_format = os.path.splitext(unquote(image_name[-1]))
         defined_images_database[image_format[0]] = image_format[-1]
     return defined_images_database
+
+'''
+какой тут может быть мэйн 
+если функция вспомогательная и принимает на вход выборку
+из ссылок на изображения от функций группы fetch_...???
+'''

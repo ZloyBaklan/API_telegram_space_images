@@ -1,16 +1,24 @@
+import os
 import requests
+
 from random import randint
+from dotenv import load_dotenv
 
-
-def nasa_space_img(nasa_token):
+def nasa_space_img(nasa_token, counter):
     url_template = 'https://api.nasa.gov/planetary/apod'
     params = {
         'api_key': f'{nasa_token}',
-        'count': f'{randint(1,50)}'
+        'count': f'{counter}'
     }
-    nasa_images_database = []
     response = requests.get(url_template,  params=params)
     response.raise_for_status()
-    for i in response.json():
-        nasa_images_database.append(i['url'])
-    return nasa_images_database
+    return response.json()
+
+
+if __name__ == '__main__':
+    load_dotenv()
+    nasa_token = os.getenv('NASA_TOKEN')
+    nasa_images_database = []
+    counter = randint(1,50)
+    for image in nasa_space_img(nasa_token, counter):
+        nasa_images_database.append(image['url'])
