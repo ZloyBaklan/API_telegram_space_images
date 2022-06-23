@@ -7,11 +7,11 @@ def fetch_spacex_last_launch(flight_id, content_path):
     params = {}
     response = requests.get(content_url, params=params)
     response.raise_for_status()
-    image_url = response.json()['links']['flickr']['original']
-    defined_images = define_image_format(image_url)
-    image_names, image_formats = (list(defined_images.keys()),
-                                  list(defined_images.values()))
-    save_images_to_path(image_url, content_path, image_names, image_formats)
+    set_of_links = response.json()['links']['flickr']['original']
+    for link in set_of_links:
+        defined_image_name, defined_image_format = define_image_format(link)
+        save_images_to_path(link, content_path, defined_image_format,
+                            defined_image_name)
 
 
 if __name__ == '__main__':
