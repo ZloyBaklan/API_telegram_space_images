@@ -31,12 +31,14 @@ def save_images_to_path(link, content_path, image_format, image_name):
         response = requests.get(link)
         response.raise_for_status()
         image.write(response.content)
+        image.close()
 
 
 def optimize_size_of_images(photo_address):
     try:
         with PIL.Image.open(photo_address) as full_size_img:
             full_size_img.thumbnail((1000, 1000))
+            full_size_img.close()
     except PIL.UnidentifiedImageError:
         os.remove(photo_address)
 

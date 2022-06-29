@@ -27,15 +27,14 @@ if __name__ == '__main__':
         fetch_spacex_last_launch(flight_id, content_path)
         nasa_epic_images(nasa_token, count_epic_content, content_path)
         nasa_space_img(nasa_token, count_nasa_content, content_path)
-        content = os.listdir(content_path)
-        for filename in content:
+        set_of_images = os.listdir(content_path)
+        for filename in set_of_images:
             photo_address = f'{content_path}/{filename}'
             optimize_size_of_images(photo_address)
-        set_of_images = os.listdir(content_path)
         while set_of_images:
             chosen_image = random.choice(set_of_images)
             set_of_images.remove(chosen_image)
-            file_path = f'{content_path}/' + chosen_image
+            file_path = f'{content_path}/{chosen_image}'
             try:
                 publish_image_to_telegram(file_path, chat_id, telegram_token)
             except telegram.error.BadRequest:

@@ -10,8 +10,12 @@ def fetch_spacex_last_launch(flight_id, content_path):
     set_of_links = response.json()['links']['flickr']['original']
     for link in set_of_links:
         defined_image_name, defined_image_format = define_image_format(link)
-        save_images_to_path(link, content_path, defined_image_format,
-                            defined_image_name)
+        save_images_to_path(
+            link,
+            content_path,
+            defined_image_format,
+            defined_image_name
+            )
 
 
 if __name__ == '__main__':
