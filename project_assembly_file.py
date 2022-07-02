@@ -8,8 +8,8 @@ from random import randint
 
 from publish_image_to_telegram import publish_image_to_telegram
 from fetch_spacex_last_launch import fetch_spacex_last_launch
-from fetch_nasa_space_images import nasa_space_img
-from fetch_nasa_epic_images import nasa_epic_images
+from fetch_nasa_space_images import get_nasa_space_img
+from fetch_nasa_epic_images import get_nasa_epic_images
 from optimize_and_save_image import optimize_size_of_images
 
 
@@ -20,13 +20,21 @@ if __name__ == '__main__':
     publication_frequency = os.getenv('PUBLICATION_FREQUENCY')
     content_path = 'images'
     flight_id = '5eb87d47ffd86e000604b38a'
-    count_nasa_content = randint(1, 50)
-    count_epic_content = 2
+    content_nasa_response_count = 25
+    content_epic_response_count = 2
     chat_id = os.getenv('CHAT_ID')
     while True:
         fetch_spacex_last_launch(flight_id, content_path)
-        nasa_epic_images(nasa_token, count_epic_content, content_path)
-        nasa_space_img(nasa_token, count_nasa_content, content_path)
+        get_nasa_epic_images(
+            nasa_token,
+            content_epic_response_count,
+            content_path
+            )
+        get_nasa_space_img(
+            nasa_token,
+            content_nasa_response_count,
+            content_path
+            )
         set_of_images = os.listdir(content_path)
         for filename in set_of_images:
             photo_address = f'{content_path}/{filename}'
