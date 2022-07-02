@@ -1,3 +1,4 @@
+import argparse
 import os
 import requests
 
@@ -31,6 +32,20 @@ def get_nasa_space_img(nasa_token, content_response_count, content_path):
 if __name__ == '__main__':
     load_dotenv()
     nasa_token = os.getenv('NASA_TOKEN')
-    content_path = 'images'
-    content_response_count = 25
-    get_nasa_space_img(nasa_token, content_response_count, content_path)
+    parser = argparse.ArgumentParser(description='Argeuments for script.')
+    parser.add_argument(
+        'content_response_count',
+        type=int,
+        help='Count of content response.'
+        )
+    parser.add_argument(
+        'content_path',
+        type=str,
+        help='Name of the content path.'
+        )
+    args = parser.parse_args()
+    get_nasa_space_img(
+        nasa_token,
+        args.content_response_count,
+        args.content_path
+        )

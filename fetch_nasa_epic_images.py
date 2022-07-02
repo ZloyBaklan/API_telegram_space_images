@@ -1,3 +1,4 @@
+import argparse
 import os
 import requests
 
@@ -45,7 +46,21 @@ def get_nasa_epic_images(nasa_token, content_response_count, content_path):
 
 if __name__ == '__main__':
     load_dotenv()
-    content_response_count = 2
     nasa_token = os.getenv('NASA_TOKEN')
-    content_path = 'images'
-    get_nasa_epic_images(nasa_token, content_response_count, content_path)
+    parser = argparse.ArgumentParser(description='Argeuments for script.')
+    parser.add_argument(
+        'content_response_count',
+        type=int,
+        help='Count of content response.'
+        )
+    parser.add_argument(
+        'content_path',
+        type=str,
+        help='Name of the content path.'
+        )
+    args = parser.parse_args()
+    get_nasa_epic_images(
+        nasa_token,
+        args.content_response_count,
+        args.content_path
+        )
