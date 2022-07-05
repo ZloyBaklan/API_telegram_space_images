@@ -8,9 +8,9 @@ from dotenv import load_dotenv
 from random import randint
 
 from publish_image_to_telegram import publish_image_to_telegram
-from fetch_spacex_last_launch import fetch_spacex_last_launch
-from fetch_nasa_space_images import get_nasa_space_img
-from fetch_nasa_epic_images import get_nasa_epic_images
+from fetch_spacex_last_launch import fetch_and_save_spacex_last_launch
+from fetch_nasa_space_images import get_and_save_nasa_space_img
+from fetch_nasa_epic_images import get_and_save_nasa_epic_images
 from optimize_and_save_image import optimize_size_of_images
 
 
@@ -43,13 +43,13 @@ if __name__ == '__main__':
         )
     args = parser.parse_args()
     while True:
-        fetch_spacex_last_launch(args.flight_id, args.content_path)
-        get_nasa_epic_images(
+        fetch_and_save_spacex_last_launch(args.flight_id, args.content_path)
+        get_and_save_nasa_epic_images(
             nasa_token,
             args.content_epic_response_count,
             args.content_path
             )
-        get_nasa_space_img(
+        get_and_save_nasa_space_img(
             nasa_token,
             args.content_nasa_response_count,
             args.content_path

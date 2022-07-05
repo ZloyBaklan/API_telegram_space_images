@@ -4,7 +4,7 @@ import requests
 from optimize_and_save_image import save_images_to_path, define_image_format
 
 
-def fetch_spacex_last_launch(flight_id, content_path):
+def fetch_and_save_spacex_last_launch(flight_id, content_path):
     content_url = f'https://api.spacexdata.com/v4/launches/{flight_id}'
     request_params = {}
     response = requests.get(content_url, params=request_params)
@@ -34,4 +34,4 @@ if __name__ == '__main__':
         help='Name of the content path.'
         )
     args = parser.parse_args()
-    fetch_spacex_last_launch(args.flight_id, args.content_path)
+    fetch_and_save_spacex_last_launch(args.flight_id, args.content_path)

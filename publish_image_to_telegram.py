@@ -10,7 +10,6 @@ def publish_image_to_telegram(file_path, chat_id, telegram_token):
     bot = telegram.Bot(token=telegram_token)
     with open(file_path, 'rb') as photo:
         bot.send_photo(chat_id=chat_id, photo=photo, caption='Свежий дроп')
-        photo.close()
 
 
 if __name__ == '__main__':
